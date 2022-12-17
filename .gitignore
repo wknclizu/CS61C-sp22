@@ -45,8 +45,14 @@
 # Kernel Module Compile Results
 *.mod*
 *.cmd
+*.cmake
 .tmp_versions/
 modules.order
 Module.symvers
+Makefile
 Mkfile.old
 dkms.conf
+/.vscode
+/build
+CMakeFiles
+CMakeCache.txt
