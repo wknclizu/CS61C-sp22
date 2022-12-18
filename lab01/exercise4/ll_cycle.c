@@ -6,11 +6,12 @@
 int ll_has_cycle(node *head) {
     if (!head) return 0;
     
+    int i;
     bool vis[25];
-    for (int i = 0; i < sizeof(vis)/sizeof(bool); i++)
+    node *p = head;
+    for (i = 0; i < sizeof(vis)/sizeof(bool); i++)
         vis[i] = false;
     
-    node *p = head;
     while (p != NULL) {
         // printf("%d ", p->value);
         if (vis[p->value]) return 1;
