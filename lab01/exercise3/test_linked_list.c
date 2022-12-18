@@ -1,3 +1,4 @@
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,11 +11,14 @@ int main(int argc, char **argv) {
 
     /*********** reverse_list test ***********/
     reverse_list(&head);
+    // printf("1\n");
+    
     for (int i = 0; i < 5; ++i) {
         add_to_front(&head, i);
         reverse_list(&head);
     }
 
+    // printf("2\n");
     int expected_values[] = {3, 1, 0, 2, 4};
     Node *curr = head;
     for (int i = 0; i < 5; ++i) {
