@@ -232,20 +232,90 @@ void update_state(game_state_t* state, int (*add_food)(game_state_t* state)) {
 
 /* Task 5 */
 game_state_t* load_board(char* filename) {
+  int len, i, cnt, j;
   FILE *fp = fopen(filename, "r");
   game_state_t* now = (game_state_t *) malloc(sizeof(game_state_t));
+
+  fseek(fp, 0, SEEK_END);
+  len = ftell(fp);
+  rewind(fp);
+
+  char *mp = (char *) malloc(sizeof(char) * len);
+  fread(mp, len, sizeof(char), fp);
+  fclose(fp);
+  // printf("%s", mp);
+
+  for (i = 0; i < len; i++) {
+    if (mp[i] == '\n') {
+      now->x_size = i;
+      break;
+    }
+  }
+  now->y_size = len / (now->x_size + 1);
+  // now->y_size = 0;
+  // for (i = 0; i < len; i++) {
+  //   if (mp[i] == '\n') {
+  //     now->y_size++;
+  //   }
+  // }
+  // printf("check size: %d %d\n", now->x_size, now->y_size);
+
+  now->board = (char **) malloc(sizeof(char *) * now->y_size);
+  cnt = 0;
+
+  for (i = 0; i < now->y_size; i++) {
+    now->board[i] = (char *) malloc(sizeof(char) * now->x_size);
+
+    for (j = 0; j < now->x_size; j++) {
+      while (mp[cnt] == '\n') {
+        cnt++;
+      }
+      now->board[i][j] = mp[cnt];
+      cnt++;
+    }
+  }
+  free(mp);
 
   return now;
 }
 
+void dfs(game_state_t* state, snake_t* s, int x, int y, int prex, int prey) {
+  char ch = state->board[y][x];
+  if (!is_snake(ch)) {
+    (*s).head_x = prex;
+    (*s).head_y = prey;
+    return;
+  }
+  dfs(state, s, x + incr_x(ch), y + incr_y(ch), x, y);
+}
+
 /* Task 6.1 */
 static void find_head(game_state_t* state, int snum) {
-
-  return;
+  dfs(state, &state->snakes[snum],
+      state->snakes[snum].tail_x, state->snakes[snum].tail_y, 0, 0);
 }
 
 /* Task 6.2 */
 game_state_t* initialize_snakes(game_state_t* state) {
+  int i, j, cnt = 0;
+  int wid = state->x_size, hei = state->y_size;
+  char ch;
+
+  state->snakes = (snake_t *) malloc(sizeof(snake_t));
+  for (i = 0; i < hei; i++) {
+    for (j = 0; j < wid; j++) {
+      ch = state->board[i][j];
+      if (is_tail(ch)) {
+        state->snakes = (snake_t *) realloc(state->snakes, sizeof(snake_t) * (cnt + 1));
+        state->snakes[cnt].tail_x = j;
+        state->snakes[cnt].tail_y = i;
+        state->snakes[cnt].live = true;
+        find_head(state, cnt);
+        cnt++;
+      }
+    }
+  }
+  state->num_snakes = cnt;
   
-  return NULL;
+  return state;
 }
