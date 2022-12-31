@@ -1,0 +1,16 @@
+OSTYPE='linux-gnu'
+SH_VERSION='sh: 0: Illegal option --'
+GIT_VERSION='git version 2.34.1'
+PYTHON3_VERSION='Python 3.10.6'
+PYTHON_VERSION='Command 'python' not found, did you mean:
+  command 'python3' from deb python3
+  command 'python' from deb python-is-python3'
+PY_VERSION='Pythonpy ???
+Python 3.10.6'
+GCC_VERSION='gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.'
+JAVA_VERSION='openjdk version "17.0.5" 2022-10-18
+OpenJDK Runtime Environment (build 17.0.5+8-Ubuntu-2ubuntu122.04)
+OpenJDK 64-Bit Server VM (build 17.0.5+8-Ubuntu-2ubuntu122.04, mixed mode, sharing)'
