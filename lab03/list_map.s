@@ -38,6 +38,7 @@ main:
     ### YOUR CODE HERE ###
     la a1, decrement
 
+
     # Issue the call to map
     jal ra, map
 
@@ -73,7 +74,7 @@ map:
     # Call the function in question on that value. DO NOT use a label (be prepared to answer why).
     # Hint: Where do we keep track of the function to call? Recall the parameters of "map".
     ### YOUR CODE HERE ###
-    jalr ra, s1, 0
+    jalr ra, a1, 0
 
     # Store the returned value back into the node
     # Where can you assume the returned value is?
@@ -97,9 +98,7 @@ map:
     lw s1, 4(sp)
     lw ra, 8(sp)
     addi sp, sp, 12
-    # bne a0, x0, map 
-    # Remember where you want to jump
-    jal x0, map
+    bne a0, x0, map
 
 done:
     # Epilogue: Restore register values and free space from the stack
