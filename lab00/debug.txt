@@ -2,9 +2,7 @@ OSTYPE='linux-gnu'
 SH_VERSION='sh: 0: Illegal option --'
 GIT_VERSION='git version 2.34.1'
 PYTHON3_VERSION='Python 3.10.6'
-PYTHON_VERSION='Command 'python' not found, did you mean:
-  command 'python3' from deb python3
-  command 'python' from deb python-is-python3'
+PYTHON_VERSION='gen-debug.sh: line 7: python: command not found'
 PY_VERSION='Pythonpy ???
 Python 3.10.6'
 GCC_VERSION='gcc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
