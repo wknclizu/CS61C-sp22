@@ -66,7 +66,7 @@ inner_loop_start:
 	sw t1, 36(sp)
 	sw t3, 40(sp)
 
-	ebreak
+	# ebreak
 	# prepare to jump to dot
 	slli t2, s1, 2	# offset from a3
 	add a0, a0, t0	# add offset from a0
@@ -77,7 +77,7 @@ inner_loop_start:
 
 	jal ra dot  	# jump to dot and save position to ra
     
-    ebreak
+    # ebreak
 	lw t3, 40(sp)
 	lw a6, 28(sp)
 	slli t4, t3, 2

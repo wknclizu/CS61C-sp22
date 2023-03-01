@@ -104,7 +104,7 @@ write_matrix:
 	addi sp, sp, 20
 	# end of fwrite
 
-	lw t3, 0(t3s)
+	lw t3, 0(t3)
 	lw t2, 0(t2)
 	addi sp, sp, 8
 	
