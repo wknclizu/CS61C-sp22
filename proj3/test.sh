@@ -9,7 +9,7 @@ set -eu
 python_exec=""
 if [ -z "${python_exec}" ]; then
   if command -v py 2>&1 >/dev/null; then
-    python_exec=py
+    python_exec=python3
   elif command -v python3 2>&1 >/dev/null; then
     python_exec=python3
   elif command -v python 2>&1 >/dev/null; then
