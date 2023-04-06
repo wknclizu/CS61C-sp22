@@ -39,13 +39,13 @@
       <a name="font" val="SansSerif plain 12"/>
     </tool>
   </lib>
-  <lib desc="file#partial-load.circ" name="6"/>
-  <lib desc="file#partial-store.circ" name="7"/>
+  <lib desc="file#imm-gen.circ" name="6"/>
+  <lib desc="file#regfile.circ" name="7"/>
   <lib desc="file#control-logic.circ" name="8"/>
-  <lib desc="file#branch-comp.circ" name="9"/>
-  <lib desc="file#regfile.circ" name="10"/>
-  <lib desc="file#alu.circ" name="11"/>
-  <lib desc="file#imm-gen.circ" name="12"/>
+  <lib desc="file#alu.circ" name="9"/>
+  <lib desc="file#partial-store.circ" name="10"/>
+  <lib desc="file#branch-comp.circ" name="11"/>
+  <lib desc="file#partial-load.circ" name="12"/>
   <main name="cpu"/>
   <options>
     <a name="gateUndefined" val="ignore"/>
@@ -381,21 +381,21 @@
       <a name="bit22" val="4"/>
       <a name="bit23" val="4"/>
       <a name="bit24" val="4"/>
-      <a name="bit25" val="4"/>
-      <a name="bit26" val="4"/>
-      <a name="bit27" val="4"/>
-      <a name="bit28" val="4"/>
-      <a name="bit29" val="4"/>
+      <a name="bit25" val="5"/>
+      <a name="bit26" val="5"/>
+      <a name="bit27" val="5"/>
+      <a name="bit28" val="5"/>
+      <a name="bit29" val="5"/>
       <a name="bit3" val="0"/>
-      <a name="bit30" val="4"/>
-      <a name="bit31" val="4"/>
+      <a name="bit30" val="5"/>
+      <a name="bit31" val="5"/>
       <a name="bit4" val="0"/>
       <a name="bit5" val="0"/>
       <a name="bit6" val="0"/>
       <a name="bit7" val="1"/>
       <a name="bit8" val="1"/>
       <a name="bit9" val="1"/>
-      <a name="fanout" val="5"/>
+      <a name="fanout" val="6"/>
       <a name="incoming" val="32"/>
       <a name="spacing" val="2"/>
     </comp>
@@ -409,12 +409,16 @@
       <a name="label" val="Instruction"/>
       <a name="width" val="32"/>
     </comp>
-    <comp lib="0" loc="(660,1140)" name="Tunnel">
+    <comp lib="0" loc="(670,1120)" name="Tunnel">
       <a name="label" val="rd"/>
       <a name="width" val="5"/>
     </comp>
-    <comp lib="0" loc="(660,1180)" name="Tunnel">
+    <comp lib="0" loc="(670,1160)" name="Tunnel">
       <a name="label" val="rs1"/>
+      <a name="width" val="5"/>
+    </comp>
+    <comp lib="0" loc="(670,1190)" name="Tunnel">
+      <a name="label" val="rs2"/>
       <a name="width" val="5"/>
     </comp>
     <comp lib="0" loc="(700,450)" name="Tunnel">
@@ -547,10 +551,9 @@
       <a name="facing" val="north"/>
       <a name="label" val="BSel"/>
     </comp>
-    <comp lib="10" loc="(1110,460)" name="regfile"/>
-    <comp lib="11" loc="(1400,540)" name="alu"/>
-    <comp lib="12" loc="(1750,760)" name="imm_gen"/>
-    <comp lib="12" loc="(720,1280)" name="imm_gen"/>
+    <comp lib="10" loc="(2030,430)" name="partial_store"/>
+    <comp lib="11" loc="(2030,760)" name="branch_comp"/>
+    <comp lib="12" loc="(2030,590)" name="partial_load"/>
     <comp lib="2" loc="(1040,1250)" name="Multiplexer">
       <a name="select" val="2"/>
       <a name="width" val="32"/>
@@ -597,10 +600,11 @@
     <comp lib="5" loc="(480,100)" name="Text">
       <a name="text" val="From IMEM"/>
     </comp>
-    <comp lib="6" loc="(2030,590)" name="partial_load"/>
-    <comp lib="7" loc="(2030,430)" name="partial_store"/>
+    <comp lib="6" loc="(1750,760)" name="imm_gen"/>
+    <comp lib="6" loc="(720,1280)" name="imm_gen"/>
+    <comp lib="7" loc="(1110,460)" name="regfile"/>
     <comp lib="8" loc="(800,840)" name="control_logic"/>
-    <comp lib="9" loc="(2030,760)" name="branch_comp"/>
+    <comp lib="9" loc="(1400,540)" name="alu"/>
     <wire from="(1000,760)" to="(1000,840)"/>
     <wire from="(1020,1270)" to="(1020,1290)"/>
     <wire from="(1040,1250)" to="(1060,1250)"/>
@@ -671,10 +675,13 @@
     <wire from="(460,1160)" to="(510,1160)"/>
     <wire from="(460,1280)" to="(500,1280)"/>
     <wire from="(520,200)" to="(590,200)"/>
-    <wire from="(530,1140)" to="(660,1140)"/>
-    <wire from="(530,1180)" to="(660,1180)"/>
+    <wire from="(530,1120)" to="(670,1120)"/>
+    <wire from="(530,1160)" to="(670,1160)"/>
+    <wire from="(530,1180)" to="(630,1180)"/>
     <wire from="(590,220)" to="(590,260)"/>
     <wire from="(590,70)" to="(590,180)"/>
+    <wire from="(630,1180)" to="(630,1190)"/>
+    <wire from="(630,1190)" to="(670,1190)"/>
     <wire from="(700,450)" to="(860,450)"/>
     <wire from="(700,480)" to="(890,480)"/>
     <wire from="(700,510)" to="(870,510)"/>
