@@ -54,4 +54,5 @@ dkms.conf
 /.vscode
 /build
 tools/
+/.idea
 CMakeCache.txt
