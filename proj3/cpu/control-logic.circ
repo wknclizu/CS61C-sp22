@@ -190,23 +190,22 @@
       <a name="locked" val="true"/>
     </comp>
     <comp lib="0" loc="(200,2130)" name="Constant">
-      <a name="value" val="0x14"/>
+      <a name="value" val="0x0"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(200,2150)" name="Constant">
-      <a name="value" val="0x14"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(200,2170)" name="Constant">
-      <a name="value" val="0x14"/>
+      <a name="value" val="0x2"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(200,2270)" name="Constant">
-      <a name="value" val="0x14"/>
+      <a name="value" val="0x3"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(200,2290)" name="Constant">
-      <a name="value" val="0x14"/>
+      <a name="value" val="0x4"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(200,230)" name="Tunnel">
@@ -214,11 +213,11 @@
       <a name="label" val="BrEq"/>
     </comp>
     <comp lib="0" loc="(200,2410)" name="Constant">
-      <a name="value" val="0x14"/>
+      <a name="value" val="0x8"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(200,2450)" name="Constant">
-      <a name="value" val="0x14"/>
+      <a name="value" val="0x9"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(220,1050)" name="Splitter">
@@ -462,19 +461,23 @@
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(490,2200)" name="Constant">
-      <a name="value" val="0x11"/>
+      <a name="value" val="0x5"/>
+      <a name="width" val="6"/>
+    </comp>
+    <comp lib="0" loc="(490,2220)" name="Constant">
+      <a name="value" val="0x6"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(490,2240)" name="Constant">
-      <a name="value" val="0x12"/>
+      <a name="value" val="0x7"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(490,2260)" name="Constant">
-      <a name="value" val="0x15"/>
+      <a name="value" val="0xa"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(490,2280)" name="Constant">
-      <a name="value" val="0x16"/>
+      <a name="value" val="0xb"/>
       <a name="width" val="6"/>
     </comp>
     <comp lib="0" loc="(500,210)" name="Pin">
