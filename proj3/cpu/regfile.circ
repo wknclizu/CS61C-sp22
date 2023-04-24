@@ -655,7 +655,6 @@
       <a name="facing" val="east"/>
       <a name="label" val="WE24"/>
     </comp>
-    <comp lib="0" loc="(2080,1120)" name="Constant"/>
     <comp lib="0" loc="(210,1720)" name="Tunnel">
       <a name="label" val="x0"/>
       <a name="width" val="32"/>
@@ -1755,7 +1754,6 @@
     <wire from="(200,2640)" to="(200,2660)"/>
     <wire from="(200,2640)" to="(220,2640)"/>
     <wire from="(2010,1190)" to="(2090,1190)"/>
-    <wire from="(2080,1120)" to="(2090,1120)"/>
     <wire from="(2090,1190)" to="(2090,1290)"/>
     <wire from="(2090,1290)" to="(2100,1290)"/>
     <wire from="(210,2020)" to="(210,2030)"/>
