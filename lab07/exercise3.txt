@@ -1,0 +1,20 @@
+--- not autograded ---
+
+Part 1
+    blocksize = 20, n = 100: 0.017, 0.023
+    blocksize = 20, n = 1000: 2.484, 1.353
+    blocksize = 20, n = 2000: 27.348, 5.676
+    blocksize = 20, n = 5000: 455.185, 82.477
+    blocksize = 20, n = 10000: 2732.5, 229.965
+
+    Checkoff Question 1: blocksize = 20, n = 1000
+    Checkoff Question 2: Because when the blockize is small, computer can store all the matrix into the cache.
+
+Part 2
+    blocksize = 50, n = 10000: 2724.86, 188.834
+    blocksize = 100, n = 10000: 2768.65, 230.041
+    blocksize = 500, n = 10000: 2664.91, 209.247
+    blocksize = 1000, n = 10000: 2621.87, 314.094
+    blocksize = 5000, n = 10000: 2608.78, 1494
+
+    Checkoff Question 3: Overall showing a downward trend. When the blocksize getting bigger, cache can't accommodate such a large array 
