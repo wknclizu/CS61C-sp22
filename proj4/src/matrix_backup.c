@@ -176,10 +176,8 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
  */
 void fill_matrix(matrix *mat, double val) {
     // Task 1.5 TODO
-    __m256d __val = _mm256_set1_pd(val);
-    for (int i = 0; i < mat->cols * mat->rows / 4 * 4; i += 4)
-        _mm256_storeu_pd(mat->data + i, __val);
-    for (int i = mat->rows * mat->cols / 4 * 4; i < mat->cols * mat->rows; i++)
+    
+    for (int i = 0; i < mat->cols * mat->rows; i++)
         mat->data[i] = val;
 }
 
@@ -193,16 +191,8 @@ double Doubleabs(double val) {
  */
 int abs_matrix(matrix *result, matrix *mat) {
     // Task 1.5 TODO
-    int siz = mat->cols * mat->rows;
-    __m256d v1, v2, v3;
-    for (int i = 0; i < siz / 4 * 4; i += 4) {
-        v3 = _mm256_set1_pd(0.0);
-        v1 = _mm256_loadu_pd(result->data + i);
-        v2 = _mm256_sub_pd(v3, v1);
-        v3 = _mm256_max_pd(v1, v2);
-        _mm256_storeu_pd(result->data + i, v3);
-        // result->data[i] = Doubleabs(mat->data[i]);
-    }
+    for (int i = 0; i < mat->cols * mat->rows; i++)
+        result->data[i] = Doubleabs(mat->data[i]);
     return 0;
 
 }
