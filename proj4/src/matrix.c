@@ -197,12 +197,16 @@ int abs_matrix(matrix *result, matrix *mat) {
     __m256d v1, v2, v3;
     for (int i = 0; i < siz / 4 * 4; i += 4) {
         v3 = _mm256_set1_pd(0.0);
-        v1 = _mm256_loadu_pd(result->data + i);
+        v1 = _mm256_loadu_pd(mat->data + i);
         v2 = _mm256_sub_pd(v3, v1);
         v3 = _mm256_max_pd(v1, v2);
         _mm256_storeu_pd(result->data + i, v3);
         // result->data[i] = Doubleabs(mat->data[i]);
     }
+    for (int i = siz / 4 * 4; i < siz; i++) {
+        result->data[i] = Doubleabs(mat->data[i]);
+    }
+
     return 0;
 
 }
@@ -225,8 +229,17 @@ int neg_matrix(matrix *result, matrix *mat) {
  * Note that the matrix is in row-major order.
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    // Task 1.5 TODO
-    for (int i = 0; i < mat1->cols * mat1->rows; i++)
+    // for (int i = 0; i < mat1->cols * mat1->rows; i++)
+    //     result->data[i] = mat1->data[i] + mat2->data[i];
+    int siz = mat1->cols * mat1->rows;
+    __m256d v1, v2;
+    for (int i = 0; i < siz / 4 * 4; i += 4) {
+        v1 = _mm256_loadu_pd(mat1->data + i);
+        v2 = _mm256_loadu_pd(mat2->data + i);
+        v1 = _mm256_add_pd(v1, v2);
+        _mm256_storeu_pd(result->data + i, v1);
+    }
+    for (int i = siz / 4 * 4; i < siz; i++)
         result->data[i] = mat1->data[i] + mat2->data[i];
     return 0;
 }
@@ -250,19 +263,23 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * You may assume `mat1`'s number of columns is equal to `mat2`'s number of rows.
  * Note that the matrix is in row-major order.
  */
+
+void tran_matrix(matrix *res, matrix *mat) {
+    int x = mat->rows, y = mat->cols;
+    for (int i = 0; i < x; i++)
+        for (int j = 0; j < y; j++)
+            res->data[j * x + y] = mat->data[i * y + j];
+}
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.6 TODO
     for (int i = 0; i < result->cols; i++)
         for (int j = 0; j < result->rows; j++)
             result->data[i * result->cols + j] = 0.0;
-        
-    for (int i = 0; i < mat1->rows; i++) {
-        for (int j = 0; j < mat2->cols; j++) {
-            for (int k = 0; k < mat1->cols; k++)
-                result->data[i * result->cols + j] += 
-                mat1->data[i * mat1->cols + k] * mat2->data[k * mat2->cols + j];
-        }
-    }
+    matrix *tmat2 = NULL;
+    allocate_matrix(&tmat2, mat2->cols, mat2->rows);
+
+
+
     return 0;
 }
 
