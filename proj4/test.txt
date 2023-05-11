@@ -1,0 +1,2 @@
+rm -f test
+gcc -g -Wall -std=c99 -fopenmp -mavx -mfma -pthread tests/mat_test.c src/matrix.c -o test -fopenmp -lcunit -I/usr/include/python3.10 -lpython3.10

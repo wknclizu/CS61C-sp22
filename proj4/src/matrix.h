@@ -1,5 +1,7 @@
 #include <Python.h>
 
+typedef __clock_t clock_t;
+
 typedef struct matrix {
     int rows; // number of rows
     int cols; // number of columns
@@ -22,3 +24,5 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2);
 int pow_matrix(matrix *result, matrix *mat, int pow);
 int neg_matrix(matrix *result, matrix *mat);
 int abs_matrix(matrix *result, matrix *mat);
+int mul_matrix2(matrix *result, matrix *mat1, matrix *mat2);
+int pow_matrix2(matrix *result, matrix *mat, int pow);

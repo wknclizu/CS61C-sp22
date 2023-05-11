@@ -2,6 +2,7 @@
 #include "CUnit/Basic.h"
 #include "../src/matrix.h"
 #include <stdio.h>
+#include <time.h>
 
 /* Test Suite setup and cleanup functions: */
 int init_suite(void) { return 0; }
@@ -192,7 +193,7 @@ void abs_test(void) {
       CU_ASSERT_EQUAL(get(result, i, j), i * 2 + j);
     }
   }
-  print_matrix(result);
+  // print_matrix(result);
   deallocate_matrix(result);
   deallocate_matrix(mat);
 }
@@ -280,6 +281,50 @@ void pow_test(void) {
   deallocate_matrix(mat);
 }
 
+void speed_test() {
+  const int blocksize = 1000;
+  const int pows = 10000000;
+  matrix *result = NULL;
+  matrix *mat = NULL;
+  CU_ASSERT_EQUAL(allocate_matrix(&result, blocksize, blocksize), 0);
+  CU_ASSERT_EQUAL(allocate_matrix(&mat, blocksize, blocksize), 0);
+
+  for (int i = 0; i < blocksize; i++)
+    for (int j = 0; j < blocksize; j++)
+      set(mat, i, j, i == j ? 1.0 : 0.0);
+  
+  clock_t start = clock();
+  pow_matrix(result, mat, pows);
+  clock_t end = clock();
+  printf("pow_matrix Time taken: %Lf s\n", (long double)(end - start) / CLOCKS_PER_SEC);
+  
+  int check0 = 0, check1 = 1;
+  for (int i = 0; i < blocksize; i++)
+    for (int j = 0; j < blocksize; j++) {
+      i == j ? (check1 &= (int)get(result, i, j)) : (check0 |= (int)get(result, i, j));
+      // CU_ASSERT_EQUAL(get(result, i, j), i == j ? 1.0 : 0);
+    }
+  CU_ASSERT_EQUAL(check1, 1);
+  CU_ASSERT_EQUAL(check0, 0);
+
+  start = clock();
+  pow_matrix2(result, mat, pows);
+  end = clock();
+  printf("pow_matrix2 Time taken: %Lf s\n", (long double)(end - start) / CLOCKS_PER_SEC);
+  
+  check1 = 1, check0 = 0;
+  for (int i = 0; i < blocksize; i++)
+    for (int j = 0; j < blocksize; j++) {
+      i == j ? check1 & (int)get(result, i, j) : check0 | (int)get(result, i, j);
+      // CU_ASSERT_EQUAL(get(result, i, j), i == j ? 1.0 : 0);
+    }
+  CU_ASSERT_EQUAL(check1, 1);
+  CU_ASSERT_EQUAL(check0, 0);
+  
+  deallocate_matrix(result);
+  deallocate_matrix(mat);
+}
+
 /************* Test Runner Code goes here **************/
 
 int main (void)
@@ -315,7 +360,8 @@ int main (void)
         (CU_add_test(pSuite, "alloc_ref_success_test", alloc_ref_success_test) == NULL) ||
         (CU_add_test(pSuite, "dealloc_null_test", dealloc_null_test) == NULL) ||
         (CU_add_test(pSuite, "get_test", get_test) == NULL) ||
-        (CU_add_test(pSuite, "set_test", set_test) == NULL)
+        (CU_add_test(pSuite, "set_test", set_test) == NULL) ||
+        (CU_add_test(pSuite, "speed_test", speed_test) == NULL)
      )
    {
       CU_cleanup_registry();

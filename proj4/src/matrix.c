@@ -264,21 +264,37 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * Note that the matrix is in row-major order.
  */
 
-void tran_matrix(matrix *res, matrix *mat) {
-    int x = mat->rows, y = mat->cols;
-    for (int i = 0; i < x; i++)
-        for (int j = 0; j < y; j++)
-            res->data[j * x + y] = mat->data[i * y + j];
-}
+const int unroll = 4;
+
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    // Task 1.6 TODO
     for (int i = 0; i < result->cols; i++)
         for (int j = 0; j < result->rows; j++)
             result->data[i * result->cols + j] = 0.0;
-    matrix *tmat2 = NULL;
-    allocate_matrix(&tmat2, mat2->cols, mat2->rows);
-
-
+    
+    __m256d v1;
+    int x = result->rows, y = result->cols, z = mat1->cols;
+    for (int j = 0; j < y / unroll * unroll; j += unroll) {
+        for (int i = 0; i < x; i++) {
+            v1 = _mm256_set1_pd(0.0);
+            for (int k = 0; k < z; k++) {
+                v1 = _mm256_add_pd(
+                    v1, _mm256_mul_pd(
+                        _mm256_set1_pd(mat1->data[i * z + k]),
+                        _mm256_loadu_pd(mat2->data + k * z + j)
+                    )
+                );
+            }
+            _mm256_storeu_pd(result->data + i * y + j, v1);
+        }
+    }
+    for (int j = y / unroll * unroll; j < y; j++) {
+        for (int i = 0; i < x; i++) {
+            for (int k = 0; k < z; k++) {
+                result->data[i * y + j] += 
+                mat1->data[i * z + k] * mat2->data[k * y + j];
+            }
+        }
+    }
 
     return 0;
 }
@@ -316,6 +332,49 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
             matrix_copy(result, tmp);
         }
         mul_matrix(tmp, tmpmat, tmpmat);
+        matrix_copy(tmpmat, tmp);
+        pow >>= 1;
+    }
+
+    deallocate_matrix(tmp);
+    deallocate_matrix(tmpmat);
+
+    return 0;
+}
+
+int mul_matrix2(matrix *result, matrix *mat1, matrix *mat2) {
+    for (int i = 0; i < result->cols; i++)
+        for (int j = 0; j < result->rows; j++)
+            result->data[i * result->cols + j] = 0.0;
+        
+    for (int i = 0; i < mat1->rows; i++) {
+        for (int j = 0; j < mat2->cols; j++) {
+            for (int k = 0; k < mat1->cols; k++)
+                result->data[i * result->cols + j] += 
+                mat1->data[i * mat1->cols + k] * mat2->data[k * mat2->cols + j];
+        }
+    }
+    return 0;
+}
+
+int pow_matrix2(matrix *result, matrix *mat, int pow) {
+    for (int i = 0; i < result->cols; i++)
+        for (int j = 0; j < result->rows; j++)
+            result->data[i * result->cols + j] = (i == j ? 1.0 : 0.0);
+    
+    matrix *tmp = NULL;
+    matrix *tmpmat = NULL;
+
+    allocate_matrix(&tmp, mat->cols, mat->rows);
+    allocate_matrix(&tmpmat, mat->cols, mat->rows);
+    matrix_copy(tmpmat, mat);
+
+    while (pow) {
+        if (pow & 1) {
+            mul_matrix2(tmp, result, tmpmat);
+            matrix_copy(result, tmp);
+        }
+        mul_matrix2(tmp, tmpmat, tmpmat);
         matrix_copy(tmpmat, tmp);
         pow >>= 1;
     }
