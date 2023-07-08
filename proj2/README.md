@@ -2,5 +2,3 @@
 
 Spec: [https://cs61c.org/sp22/projects/proj2/](https://cs61c.org/sp22/projects/proj2/)
 
-TODO: describe what you did  
-PartA about 4 hours  

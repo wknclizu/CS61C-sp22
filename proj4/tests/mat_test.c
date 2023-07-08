@@ -346,7 +346,7 @@ int main (void)
    /* add the tests to the suite */
    if (
         (CU_add_test(pSuite, "add_test", add_test) == NULL) ||
-        /* (OPTIONAL) Uncomment the following lines if you have implemented sub_matrix and neg_matrix.
+        /*(OPTIONAL) Uncomment the following lines if you have implemented sub_matrix and neg_matrix.
         (CU_add_test(pSuite, "sub_test", sub_test) == NULL) ||
         (CU_add_test(pSuite, "neg_test", neg_test) == NULL) ||
         */

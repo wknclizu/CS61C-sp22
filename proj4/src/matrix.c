@@ -177,8 +177,10 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
 void fill_matrix(matrix *mat, double val) {
     // Task 1.5 TODO
     __m256d __val = _mm256_set1_pd(val);
+    #pragma omp parallel for
     for (int i = 0; i < mat->cols * mat->rows / 4 * 4; i += 4)
         _mm256_storeu_pd(mat->data + i, __val);
+    #pragma omp parallel for
     for (int i = mat->rows * mat->cols / 4 * 4; i < mat->cols * mat->rows; i++)
         mat->data[i] = val;
 }
@@ -195,6 +197,8 @@ int abs_matrix(matrix *result, matrix *mat) {
     // Task 1.5 TODO
     int siz = mat->cols * mat->rows;
     __m256d v1, v2, v3;
+
+    #pragma omp parallel for private(v1, v2, v3)
     for (int i = 0; i < siz / 4 * 4; i += 4) {
         v3 = _mm256_set1_pd(0.0);
         v1 = _mm256_loadu_pd(mat->data + i);
@@ -203,6 +207,8 @@ int abs_matrix(matrix *result, matrix *mat) {
         _mm256_storeu_pd(result->data + i, v3);
         // result->data[i] = Doubleabs(mat->data[i]);
     }
+
+    #pragma omp parallel for
     for (int i = siz / 4 * 4; i < siz; i++) {
         result->data[i] = Doubleabs(mat->data[i]);
     }
@@ -233,12 +239,14 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     result->data[i] = mat1->data[i] + mat2->data[i];
     int siz = mat1->cols * mat1->rows;
     __m256d v1, v2;
+    #pragma omp parallel for private(v1, v2)
     for (int i = 0; i < siz / 4 * 4; i += 4) {
         v1 = _mm256_loadu_pd(mat1->data + i);
         v2 = _mm256_loadu_pd(mat2->data + i);
         v1 = _mm256_add_pd(v1, v2);
         _mm256_storeu_pd(result->data + i, v1);
     }
+    #pragma omp parallel for
     for (int i = siz / 4 * 4; i < siz; i++)
         result->data[i] = mat1->data[i] + mat2->data[i];
     return 0;
@@ -267,12 +275,15 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 const int unroll = 4;
 
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
+    #pragma omp parallel for
     for (int i = 0; i < result->cols; i++)
         for (int j = 0; j < result->rows; j++)
             result->data[i * result->cols + j] = 0.0;
     
     __m256d v1;
     int x = result->rows, y = result->cols, z = mat1->cols;
+
+    #pragma omp parallel for private(v1)
     for (int j = 0; j < y / unroll * unroll; j += unroll) {
         for (int i = 0; i < x; i++) {
             v1 = _mm256_set1_pd(0.0);
@@ -287,11 +298,22 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             _mm256_storeu_pd(result->data + i * y + j, v1);
         }
     }
-    for (int j = y / unroll * unroll; j < y; j++) {
-        for (int i = 0; i < x; i++) {
-            for (int k = 0; k < z; k++) {
-                result->data[i * y + j] += 
-                mat1->data[i * z + k] * mat2->data[k * y + j];
+    //corner case
+    #pragma omp parallel
+    {   
+        double tmp;
+        #pragma omp for
+        for (int j = y / unroll * unroll; j < y; j++) {
+            for (int i = 0; i < x; i++) {
+                tmp = 0.0;
+                for (int k = 0; k < z; k++) {
+                    tmp += mat1->data[i * z + k] * mat2->data[k * y + j];
+                    // #pragma omp critical
+                    // result->data[i * y + j] += 
+                    // mat1->data[i * z + k] * mat2->data[k * y + j];
+                }
+                #pragma omp critical
+                result->data[i * y + j] += tmp;
             }
         }
     }
@@ -308,6 +330,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 void matrix_copy(matrix *fin, matrix *tar) {
     int x = fin->cols;
+    #pragma omp parallel for
     for (int i = 0; i < x; i++)
         for (int j = 0; j < x; j++)
             fin->data[i * x + j] = tar->data[i * x + j];
@@ -324,15 +347,18 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
     allocate_matrix(&tmp, mat->cols, mat->rows);
     allocate_matrix(&tmpmat, mat->cols, mat->rows);
-    matrix_copy(tmpmat, mat);
+    // matrix_copy(tmpmat, mat);
+    memcpy(tmpmat->data, mat->data, sizeof(double) * result->cols * result->rows);
 
     while (pow) {
         if (pow & 1) {
             mul_matrix(tmp, result, tmpmat);
-            matrix_copy(result, tmp);
+            memcpy(result->data, tmp->data, sizeof(double) * result->cols * result->rows);
+            // matrix_copy(result, tmp);
         }
         mul_matrix(tmp, tmpmat, tmpmat);
-        matrix_copy(tmpmat, tmp);
+        // matrix_copy(tmpmat, tmp);
+        memcpy(tmpmat->data, tmp->data, sizeof(double) * tmpmat->cols * tmpmat->rows);
         pow >>= 1;
     }
 
